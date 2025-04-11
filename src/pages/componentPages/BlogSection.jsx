@@ -16,7 +16,7 @@ const blogPosts = [
         date: "July 10, 2015",
         comments: 13,
         text:
-            "Town to town and up and down the dial. Said Califor\'ny is the place you ought to be So they loaded up the truck and moved to Beverly.",
+            "Town to town and up and down the dial. Said Califor'ny is the place you ought to be So they loaded up the truck and moved to Beverly.",
         iconType: "image"
     },
     {
