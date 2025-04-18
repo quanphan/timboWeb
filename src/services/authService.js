@@ -1,5 +1,5 @@
 import axiosInstance from "./axiosInstance";
-import API_URL from "../config/api";
+import axiosRefreshInstance from "./axiosRefreshInstance";
 
 async function login(email, password) {
     const res = await axiosInstance.post("/api/auth/login", { email, password });
@@ -22,16 +22,15 @@ async function register(email, password) {
     return res.data;
 }
 
-// Hàm tự refresh access token
 async function refreshToken() {
     const refreshToken = localStorage.getItem("refreshToken");
     if (!refreshToken) throw new Error("No refresh token");
 
-    const res = await axiosInstance.post("/api/auth/refresh", { refreshToken });
-
+    const res = await axiosRefreshInstance.post("/api/auth/refresh", { refreshToken }); // 👈 dùng axiosRefreshInstance
     const { accessToken } = res.data;
 
     localStorage.setItem("token", accessToken);
+
     return accessToken;
 }
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { API_URL } from "../config/api";
-import { refreshToken } from "./authService";
+import {getProfile, refreshToken} from "./authService";
 
 const axiosInstance = axios.create({
     baseURL: API_URL,
@@ -9,18 +9,17 @@ const axiosInstance = axios.create({
         "Content-Type": "application/json",
     },
 });
-// Interceptor request tự đính Authorization và check token
 axiosInstance.interceptors.request.use(async (config) => {
     let token = localStorage.getItem("token");
 
     if (token) {
         try {
             const decoded = jwtDecode(token);
-            const now = Date.now() / 1000; // thời gian hiện tại (giây)
+            const now = Date.now() / 1000; // (giây)
 
             // Nếu token còn < 2 phút sẽ tự refresh
             if (decoded.exp - now < 120) {
-                token = await refreshToken(); // lấy token mới
+                token = await refreshToken(); // token mới
             }
 
             config.headers.Authorization = `Bearer ${token}`;
@@ -35,11 +34,14 @@ axiosInstance.interceptors.request.use(async (config) => {
 // Interceptor response tự bắt lỗi 401
 axiosInstance.interceptors.response.use(
     (response) => response,
-    (error) => {
+    async (error) => {
         if (error.response && error.response.status === 401) {
             localStorage.removeItem("token");
             localStorage.removeItem("refreshToken");
-            window.location.href = "/"; // tự logout
+
+            if (window.location.pathname !== "/login") {
+                window.location.href = "/login";
+            }
         }
         return Promise.reject(error);
     }

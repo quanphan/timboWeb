@@ -14,24 +14,24 @@ export const AuthProvider = ({ children }) => {
                 setLoading(false);
                 return;
             }
-
             try {
                 const profile = await getProfile();
                 setUser(profile);
             } catch (err) {
+                console.error(err);
                 doLogout();
                 setUser(null);
             } finally {
                 setLoading(false);
             }
         };
-
         init();
     }, []);
 
     const logout = () => {
         doLogout();
         setUser(null);
+        setLoading(false);
     };
 
     return (
