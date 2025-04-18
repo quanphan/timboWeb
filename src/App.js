@@ -7,16 +7,22 @@ import HomePage from "./pages/HomePage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
-
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { AuthProvider } from "./contexts/AuthContext";
 const App = () => (
     <Router>
-        <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-        </Routes>
+        <AuthProvider>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+            </Routes>
+        </AuthProvider>
     </Router>
 );
 export default App;
