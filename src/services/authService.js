@@ -22,6 +22,11 @@ async function register(email, password) {
     return res.data;
 }
 
+async function googleLogin(credential) {
+    const res = await axiosInstance.post("/api/auth/google-login", { credential });
+    return res.data.token;
+}
+
 async function refreshToken() {
     const refreshToken = localStorage.getItem("refreshToken");
     if (!refreshToken) throw new Error("No refresh token");
@@ -45,4 +50,5 @@ export {
     register,
     refreshToken,
     logout,
+    googleLogin,
 };
