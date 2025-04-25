@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { googleLogin, getProfile } from "../services/authService";
+import {jwtDecode} from "jwt-decode";
 
 export default function LoginGoogleBtn() {
     const { setUser } = useContext(AuthContext);
@@ -12,13 +13,20 @@ export default function LoginGoogleBtn() {
         try {
             const credential = credentialResponse.credential;
 
-            // 👇 Gửi credential về backend để xác thực
+            // 👇 Gửi credential để xác thực
             const token = await googleLogin(credential);
 
-            // Lưu token và lấy profile như thường
             localStorage.setItem("token", token);
             const profile = await getProfile();
             setUser(profile);
+
+            // const decoded = jwtDecode(credential);
+            // setUser({
+            //     email: decoded.email,
+            //     name: decoded.name,
+            //     picture: decoded.picture,
+            // });
+
             navigate("/");
         } catch (err) {
             console.error("Google login failed:", err);
