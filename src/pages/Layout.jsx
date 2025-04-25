@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { Menu, X } from "lucide-react"; // 👈 npm install lucide-react
+import { Menu, X } from "lucide-react";
+import ShopPage from "./ShopPage"; // 👈 npm install lucide-react
 
 const Layout = ({ children }) => {
     const navigate = useNavigate();
@@ -36,8 +37,8 @@ const Layout = ({ children }) => {
                     <nav className="hidden sm:flex space-x-6 uppercase font-bold text-sm">
                         <Link to="/" className="hover:text-yellow-500">Home</Link>
                         <Link to="/about" className="hover:text-yellow-500">About Us</Link>
-                        <Link to="/services" className="hover:text-yellow-500">Services</Link>
-                        <Link to="/projects" className="hover:text-yellow-500">Portfolio</Link>
+                        <Link to="/Shop" className="hover:text-yellow-500">Shop</Link>
+                        <Link to="/projects" className="hover:text-yellow-500">Projects</Link>
                         <Link to="/blog" className="hover:text-yellow-500">Blog</Link>
                         <Link to="/contact" className="hover:text-yellow-500">Contact Us</Link>
                     </nav>
@@ -73,8 +74,8 @@ const Layout = ({ children }) => {
                     <div className="sm:hidden bg-white px-6 py-4 space-y-3 border-t">
                         <Link to="/" className="block text-sm font-semibold text-gray-700 hover:text-yellow-500">Home</Link>
                         <Link to="/about" className="block text-sm font-semibold text-gray-700 hover:text-yellow-500">About Us</Link>
-                        <Link to="/services" className="block text-sm font-semibold text-gray-700 hover:text-yellow-500">Services</Link>
-                        <Link to="/projects" className="block text-sm font-semibold text-gray-700 hover:text-yellow-500">Portfolio</Link>
+                        <Link to="/Shop" className="block text-sm font-semibold text-gray-700 hover:text-yellow-500">Shop</Link>
+                        <Link to="/projects" className="block text-sm font-semibold text-gray-700 hover:text-yellow-500">projects</Link>
                         <Link to="/blog" className="block text-sm font-semibold text-gray-700 hover:text-yellow-500">Blog</Link>
                         <Link to="/contact" className="block text-sm font-semibold text-gray-700 hover:text-yellow-500">Contact Us</Link>
 
