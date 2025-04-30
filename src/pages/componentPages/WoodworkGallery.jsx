@@ -25,6 +25,9 @@ const WoodworkGallery = () => {
 
     return (
         <div className=" max-w-7xl mx-auto text-white pb-10">
+            <div className="flex justify-center space-x-4 py-6">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-6">Our Work</h2>
+            </div>
             {/* Filter Buttons */}
             <div className="flex justify-center space-x-4 py-6">
                 {categories.map((category, index) => (

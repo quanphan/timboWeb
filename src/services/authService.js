@@ -31,7 +31,7 @@ async function refreshToken() {
     const refreshToken = localStorage.getItem("refreshToken");
     if (!refreshToken) throw new Error("No refresh token");
 
-    const res = await axiosRefreshInstance.post("/api/auth/refresh", { refreshToken }); // 👈 dùng axiosRefreshInstance
+    const res = await axiosRefreshInstance.post("/api/auth/refresh", { refreshToken });
     const { accessToken } = res.data;
 
     localStorage.setItem("token", accessToken);

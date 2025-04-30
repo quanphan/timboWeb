@@ -1,36 +1,51 @@
-import axios from 'axios';
+import axios from "./axiosInstance";
 
-// Tạo một instance của axios
-const api = axios.create({
-    baseURL: 'http://localhost:5050/api',
-});
 
-//Hàm gọi API để update
-const postData = async () => {
+export async function sendMessage(data) {
     try {
-        const response = await api.get('/posts/1');
-        return response.data;
+        const res = await axios.post("api/contact", data);
+        return res.data;
     } catch (error) {
-        console.error('Error fetching data:', error);
-        throw error;
+        if (error.response) {
+            // Lỗi từ server (400, 422, 500, ...)
+            throw new Error(error.response.data.error || 'Server Error');
+        } else if (error.request) {
+            // Không kết nối được server
+            throw new Error('No response from server');
+        } else {
+            // Các lỗi khác
+            throw new Error(error.message || 'Unexpected Error');
+        }
     }
-};
+}
 
-// Hàm gọi API để lấy dữ liệu
-const getData = async () => {
+// Nếu cần thêm:
+export async function getMessageList(page = 1, limit = 5) {
     try {
-        const response = await api.get('/posts/1');
-        return response.data;
+        const res = await axios.get(`api/contact?page=${page}&limit=${limit}`);
+        return res.data;
     } catch (error) {
-        console.error('Error fetching data:', error);
-        throw error;
+        if (error.response) {
+            throw new Error(error.response.data.error || 'Server Error');
+        } else if (error.request) {
+            throw new Error('No response from server');
+        } else {
+            throw new Error(error.message || 'Unexpected Error');
+        }
     }
-};
+}
 
-// ✅ Gán vào một biến trước khi export
-const apiService = {
-    getData,
-};
-
-export default apiService;
-
+export async function deleteMessage(id) {
+    try {
+        const res = await axios.delete(`api/contact/${id}`);
+        return res.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.error || 'Server Error');
+        } else if (error.request) {
+            throw new Error('No response from server');
+        } else {
+            throw new Error(error.message || 'Unexpected Error');
+        }
+    }
+}

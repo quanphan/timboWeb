@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { getProducts, getTypes } from "../services/productService";
+import Layout from "./Layout";
 const PAGE_SIZE = 10;
 const ShopPage = () => {
     const [products, setProducts] = useState([]);
@@ -46,6 +47,7 @@ const ShopPage = () => {
     };
 
     return (
+        <Layout>
         <div className="max-w-7xl mx-auto px-4 py-10">
             <h1 className="text-3xl font-bold text-center mb-8">Shop Gỗ Thủ Công</h1>
 
@@ -65,24 +67,32 @@ const ShopPage = () => {
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
                 {products.map((product) => (
-                    <div key={product.id} className="border rounded-lg p-4 shadow-sm bg-white">
+                    <div
+                        key={product.id}
+                        className="flex flex-col items-center text-center bg-white rounded-lg shadow-sm p-3 sm:p-4 hover:shadow-md transition duration-300"
+                    >
                         <img
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-48 object-cover rounded mb-4"
+                            className="w-20 h-20 sm:w-28 sm:h-28 object-contain mb-3"
                         />
-                        <h3 className="text-xl font-semibold mb-1">{product.name}</h3>
-                        <p className="text-sm text-gray-500 mb-2">#{product.code}</p>
-                        <p className="text-gray-700 mb-3">{product.description}</p>
-                        <p className="text-yellow-600 font-bold text-lg mb-2">
-                            {product.price.toLocaleString()} ₫
+                        <h3 className="text-sm sm:text-base font-bold text-gray-900">{product.brand}</h3>
+                        <p className="text-xs sm:text-sm text-gray-800 line-clamp-2">{product.name}. <span className="text-gray-700">{product.description}</span> </p>
+                        <p className="text-base sm:text-lg font-semibold text-red-600 mt-1">
+                            {product.price.toLocaleString()} ₫   <span className="text-[10px] sm:text-xs text-gray-800 mb-2">{product.rating} *</span>
                         </p>
-                        <div className="text-sm text-gray-500">Rating: {product.rating} / 5</div>
+                        <p className="text-[10px] sm:text-xs text-gray-500 mb-2">
+                            Delivery <span className="font-semibold">Tuesday, May 27</span>
+                        </p>
+                        <button className="bg-gray-100 border rounded-full px-3 py-1 text-xs sm:text-sm hover:bg-gray-200">
+                            See details
+                        </button>
                     </div>
                 ))}
             </div>
+
 
             {hasMore && (
                 <div className="flex justify-center mt-8">
@@ -95,6 +105,7 @@ const ShopPage = () => {
                 </div>
             )}
         </div>
+       </Layout>
     );
 };
 

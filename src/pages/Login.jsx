@@ -36,7 +36,7 @@ export default function Login() {
             navigate("/");
         } catch (err) {
             console.error(err);
-            setError(err.message || "Đăng nhập thất bại");
+            setError(err.message || "Login not success");
         } finally {
             setLoading(false);
         }
@@ -45,7 +45,7 @@ export default function Login() {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
             <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md w-full max-w-md">
-                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Đăng nhập</h2>
+                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
 
                 {error && <p className="mb-4 text-red-600 text-sm text-center">{error}</p>}
 
@@ -70,7 +70,7 @@ export default function Login() {
                             className="w-full pl-10 pr-10 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Mật khẩu"
+                            placeholder="Password"
                             required
                         />
                         <button
@@ -90,11 +90,11 @@ export default function Login() {
                         {loading ? (
                             <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
                         ) : (
-                            "Đăng nhập"
+                            "Login"
                         )}
                     </button>
                     <div className="mb-6 text-center">
-                        <p className="text-sm text-gray-500 mb-2">Hoặc đăng nhập bằng</p>
+                        <p className="text-sm text-gray-500 mb-2">Or using</p>
                         <GoogleOAuthProvider clientId="78990949627-ud4rj1bpg1meaqkb01ngb9nm9rcsofmm.apps.googleusercontent.com">
                             <LoginGoogleBtn />
                         </GoogleOAuthProvider>
@@ -102,8 +102,7 @@ export default function Login() {
                 </form>
 
                 <p className="mt-6 text-sm text-center text-gray-500">
-                    Chưa có tài khoản?{" "}
-                    <a href="/register" className="text-blue-600 hover:underline">Đăng ký ngay</a>
+                    <a href="/register" className="text-blue-600 hover:underline">Register now</a>
                 </p>
             </div>
         </div>

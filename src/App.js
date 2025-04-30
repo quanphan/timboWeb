@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { AuthProvider } from "./contexts/AuthContext";
 import BlogPage from "./pages/BlogPage";
+import AdminPage from "./pages/AdminPage";
+import { Toaster } from 'react-hot-toast';
 const App = () => (
     <Router>
         <AuthProvider>
@@ -23,8 +25,11 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<BlogPage />} />
+                <Route path="/admin" element={<AdminPage />} />
             </Routes>
+            <Toaster position="top-right" reverseOrder={false} />
         </AuthProvider>
     </Router>
+
 );
 export default App;
