@@ -13,6 +13,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import BlogPage from "./pages/BlogPage";
 import AdminPage from "./pages/AdminPage";
 import { Toaster } from 'react-hot-toast';
+import ProductDetailPage from './pages/ProductDetailPage';
 const App = () => (
     <Router>
         <AuthProvider>
@@ -26,6 +27,7 @@ const App = () => (
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/admin" element={<AdminPage />} />
+                <Route path="/product/:id" element={<ProductDetailPage />} />
             </Routes>
             <Toaster position="top-right" reverseOrder={false} />
         </AuthProvider>
