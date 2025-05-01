@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ServiceTabDetail from "./ServiceTabDetail";
 
 export default function ServiceSection() {
     const tabs = [
@@ -87,27 +88,7 @@ export default function ServiceSection() {
             </div>
 
             {/* Nội dung tab */}
-            <div className="flex flex-col md:flex-row items-start gap-8">
-                <div className="md:w-1/2 space-y-4">
-                    <p className="text-sm text-orange-500 font-semibold uppercase tracking-wider">What We Do</p>
-                    <h2 className="text-3xl font-bold text-gray-800">{activeTab.title}</h2>
-                    <p className="text-gray-700 text-base leading-relaxed">{activeTab.description}</p>
-                    <p className="text-gray-500 text-sm">{activeTab.subtext}</p>
-                    <Link
-                        to={activeTab.url}
-                        className="inline-block bg-orange-500 text-white py-2 px-5 rounded shadow hover:bg-orange-600 transition"
-                    >
-                        {activeTab.action}
-                    </Link>
-                </div>
-                <div className="md:w-1/2">
-                    <img
-                        src={activeTab.image}
-                        alt={activeTab.title}
-                        className="w-full h-auto rounded-xl shadow-md"
-                    />
-                </div>
-            </div>
+            <ServiceTabDetail tab={activeTab} />
         </div>
     );
 }
