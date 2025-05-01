@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaEnvelope, FaBoxOpen, FaPen } from 'react-icons/fa';
 import AdminMessages from './Ad_MessageList';
 import AdminProducts from './Ad_Products';
 // import AdminPosts from './AdminPosts';
 
 export default function AdminPage() {
     const tabs = [
-        { id: 'messages', label: 'Messages' },
-        { id: 'products', label: 'Products' },
-        { id: 'posts', label: 'Posts' },
+        { id: 'messages', label: 'Messages', icon: <FaEnvelope /> },
+        { id: 'products', label: 'Products', icon: <FaBoxOpen /> },
+        { id: 'posts', label: 'Posts', icon: <FaPen /> },
     ];
 
     const [activeTab, setActiveTab] = useState('messages');
@@ -30,13 +31,14 @@ export default function AdminPage() {
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`py-2 px-4 text-sm font-semibold border-b-2 transition-all ${
+                        className={`flex items-center gap-2 py-2 px-3 md:px-4 text-sm font-semibold border-b-2 transition-all ${
                             activeTab === tab.id
                                 ? 'border-orange-500 text-orange-500'
                                 : 'border-transparent text-gray-600 hover:text-orange-400'
                         }`}
                     >
-                        {tab.label}
+                        <span className="text-base">{tab.icon}</span>
+                        <span className="hidden sm:inline">{tab.label}</span>
                     </button>
                 ))}
             </div>
