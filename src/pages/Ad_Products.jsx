@@ -73,9 +73,9 @@ export default function AdminProducts() {
         }
     };
 
-    const handleEditSave = async () => {
+    const handleEditSave = async (updatedProduct) => {
         try {
-            await updateProduct(editProduct.id, editProduct);
+            await updateProduct(updatedProduct.id, updatedProduct);
             toast.success('Product updated!');
             setEditProduct(null);
             fetchProducts();
@@ -200,7 +200,9 @@ export default function AdminProducts() {
                 product={editProduct}
                 onClose={() => setEditProduct(null)}
                 onSave={handleEditSave}
-                onChange={handleEditChange}
+                onChange={(field, value) =>
+                    setEditProduct((prev) => ({ ...prev, [field]: value }))
+                }
             />
         </div>
     );

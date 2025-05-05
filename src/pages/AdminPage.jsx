@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaEnvelope, FaBoxOpen, FaPen } from 'react-icons/fa';
+import { MantineProvider } from '@mantine/core';
 import AdminMessages from './Ad_MessageList';
 import AdminProducts from './Ad_Products';
 // import AdminPosts from './AdminPosts';
@@ -15,7 +16,8 @@ export default function AdminPage() {
     const [activeTab, setActiveTab] = useState('messages');
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+            <div className="max-w-7xl mx-auto px-4 py-6">
             <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
                 <h1 className="text-3xl font-bold text-gray-800">Admin Panel</h1>
                 <Link
@@ -54,5 +56,6 @@ export default function AdminPage() {
                 )}
             </div>
         </div>
+        </MantineProvider>
     );
 }
