@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export default function PriceInput({ value, onChange, className = '', unit = '' }) {
+export default function PriceInput({ value, onChange, className = '', unit }) {
+    const defaultUnit = unit || '$';
     const [inputValue, setInputValue] = useState('');
     const [isFocused, setIsFocused] = useState(false);
 
@@ -17,13 +18,23 @@ export default function PriceInput({ value, onChange, className = '', unit = '' 
     const formatNumber = (val) => {
         const [intPart, decimalPart] = String(val).split('.');
         const formatted = Number(intPart).toLocaleString();
-        return decimalPart ? `${formatted}.${decimalPart}` : formatted;
+        if (decimalPart !== undefined) {
+            return `${formatted}.${decimalPart.slice(0, 2)}`;
+        }
+        return formatted;
     };
 
     const handleChange = (e) => {
-        const raw = e.target.value.replace(/[^0-9.]/g, '');
-        const parts = raw.split('.');
-        if (parts.length > 2) return;
+        let raw = e.target.value.replace(/[^0-9.]/g, '');
+
+        const dotCount = (raw.match(/\./g) || []).length;
+        if (dotCount > 1) return;
+
+        if (raw.includes('.')) {
+            const [intPart, decimalPart] = raw.split('.');
+            raw = `${intPart}.${decimalPart.slice(0, 2)}`;
+        }
+
         setInputValue(raw);
         onChange(raw);
     };
@@ -42,9 +53,9 @@ export default function PriceInput({ value, onChange, className = '', unit = '' 
 
     return (
         <div className={`relative ${className}`}>
-            {unit && unit !== '₫' && (
+            {defaultUnit !== 'd' && (
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
-          {unit}
+          {defaultUnit}
         </span>
             )}
             <input
@@ -54,12 +65,10 @@ export default function PriceInput({ value, onChange, className = '', unit = '' 
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 inputMode="decimal"
-                className={`w-full border p-2 ${
-                    unit ? 'pl-7' : 'pl-3'
-                } rounded focus:outline-none focus:ring-2 focus:ring-orange-400`}
-                placeholder={unit === '₫' ? '0' : ''}
+                className={`w-full border p-2 ${defaultUnit !== '₫' ? 'pl-7' : 'pl-3'} rounded focus:outline-none focus:ring-2 focus:ring-orange-400`}
+                placeholder={defaultUnit === 'd' ? '0' : ''}
             />
-            {unit === '₫' && (
+            {defaultUnit === 'd' && (
                 <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
           ₫
         </span>

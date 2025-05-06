@@ -98,7 +98,6 @@ export default function EditProductModal({ product, onClose, onSave, onChange })
                         />
                     </div>
 
-                    {/* DESCRIPTION */}
                     <input
                         type="text"
                         placeholder="DESCRIPTION"
@@ -108,15 +107,12 @@ export default function EditProductModal({ product, onClose, onSave, onChange })
                     />
 
                     <div className="flex flex-col md:flex-row gap-4">
-                        {/* PRICE */}
                         <PriceInput
                             value={product.price}
                             onChange={(value) => onChange('price', value)}
-                            unit="$"
+                            unit={product.unit}
                             className="w-full md:w-1/2"
                         />
-
-                        {/* RATING */}
                         <input
                             type="number"
                             placeholder="RATING"

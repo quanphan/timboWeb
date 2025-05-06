@@ -2,6 +2,7 @@ import imageCompression from 'browser-image-compression';
 import {uploadImage} from "../../services/uploadService";
 import {API_URL} from "../../config/api";
 import SelectField from "../../components/SelectField";
+import PriceInput from "../../components/PriceInput";
 
 export default function AddProductForm({ newProduct, onChange, onSubmit, typeOptions, brandOptions }) {
     const backendUrl = API_URL;
@@ -32,17 +33,66 @@ export default function AddProductForm({ newProduct, onChange, onSubmit, typeOpt
 
     return (
         <form className="grid md:grid-cols-2 gap-4 mb-8" onSubmit={onSubmit}>
-            {['code', 'name', 'description', 'price', 'rating'].map((field) => (
+
+            <div className="flex flex-col md:flex-row gap-4">
                 <input
-                    key={field}
                     type="text"
-                    placeholder={field.toUpperCase()}
-                    value={newProduct[field]}
-                    onChange={(e) => onChange(field, e.target.value)}
-                    className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-                    required
+                    placeholder="CODE"
+                    value={newProduct.code}
+                    onChange={(e) => onChange('code', e.target.value)}
+                    className="w-full md:w-1/4 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
-            ))}
+                <input
+                    type="text"
+                    placeholder="NAME"
+                    value={newProduct.name}
+                    onChange={(e) => onChange('name', e.target.value)}
+                    className="w-full md:w-3/4 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-4">
+                <SelectField
+                    label=""
+                    value={newProduct.type}
+                    options={typeOptions}
+                    onChange={(val) => onChange('type', val)}
+                    className="w-full md:w-1/2"
+                />
+
+                <SelectField
+                    label=""
+                    value={newProduct.brand}
+                    options={brandOptions}
+                    onChange={(val) => onChange('brand', val)}
+                    className="w-full md:w-1/2"
+                />
+            </div>
+
+            <input
+                type="text"
+                placeholder="DESCRIPTION"
+                value={newProduct.description}
+                onChange={(e) => onChange('description', e.target.value)}
+                className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+
+            <div className="flex flex-col md:flex-row gap-4">
+                <input
+                    type="text"
+                    placeholder="UNIT"
+                    value={newProduct.unit}
+                    onChange={(e) => onChange('unit', e.target.value)}
+                    className="w-full md:w-1/2 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
+
+                <PriceInput
+                    value={newProduct.price}
+                    onChange={(value) => onChange('price', value)}
+                    unit={newProduct.unit}
+                    className="w-full md:w-1/2"
+                />
+            </div>
 
             {/* Upload Image */}
             <div className="flex flex-col gap-2">
@@ -59,24 +109,6 @@ export default function AddProductForm({ newProduct, onChange, onSubmit, typeOpt
                     <img src={`${backendUrl}${newProduct.image}`} alt="Preview" className="w-24 h-24 object-cover rounded mt-2" />
                 ) : null}
             </div>
-
-            {/* Combo box Type */}
-            <SelectField
-                label="Type"
-                value={newProduct.type}
-                options={typeOptions}
-                onChange={(value) => onChange('type', value)}
-                required
-            />
-
-            {/* Combo box Brand */}
-            <SelectField
-                label="Brand"
-                value={newProduct.brand}
-                options={brandOptions}
-                onChange={(value) => onChange('brand', value)}
-                required
-            />
 
             <div className="md:col-span-2 flex justify-end">
                 <button
