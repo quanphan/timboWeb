@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import SelectField from '../../components/SelectField';
 import TinyMCEEditor from '../../components/TinyMCEEditor';
 import { uploadImage } from '../../services/uploadService';
+import PriceInput from "../../components/PriceInput";
 import {API_URL} from "../../config/api";
 
 export default function EditProductModal({ product, onClose, onSave, onChange }) {
@@ -63,30 +64,67 @@ export default function EditProductModal({ product, onClose, onSave, onChange })
                 <h2 className="text-lg font-bold mb-4">Edit Product</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {['code', 'name', 'description', 'price', 'rating'].map((field) => (
+                    <div className="flex flex-col md:flex-row gap-4">
                         <input
-                            key={field}
                             type="text"
-                            placeholder={field.toUpperCase()}
-                            value={product[field]}
-                            onChange={(e) => onChange(field, e.target.value)}
-                            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                            placeholder="CODE"
+                            value={product.code}
+                            onChange={(e) => onChange('code', e.target.value)}
+                            className="w-full md:w-1/4 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
                         />
-                    ))}
+                        <input
+                            type="text"
+                            placeholder="NAME"
+                            value={product.name}
+                            onChange={(e) => onChange('name', e.target.value)}
+                            className="w-full md:w-3/4 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        />
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <SelectField
+                            label=""
+                            value={product.type}
+                            options={typeOptions}
+                            onChange={(val) => onChange('type', val)}
+                            className="w-full md:w-1/2"
+                        />
 
-                    <SelectField
-                        label="Type"
-                        value={product.type}
-                        options={typeOptions}
-                        onChange={(val) => onChange('type', val)}
+                        <SelectField
+                            label=""
+                            value={product.brand}
+                            options={brandOptions}
+                            onChange={(val) => onChange('brand', val)}
+                            className="w-full md:w-1/2"
+                        />
+                    </div>
+
+                    {/* DESCRIPTION */}
+                    <input
+                        type="text"
+                        placeholder="DESCRIPTION"
+                        value={product.description}
+                        onChange={(e) => onChange('description', e.target.value)}
+                        className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
                     />
 
-                    <SelectField
-                        label="Brand"
-                        value={product.brand}
-                        options={brandOptions}
-                        onChange={(val) => onChange('brand', val)}
-                    />
+                    <div className="flex flex-col md:flex-row gap-4">
+                        {/* PRICE */}
+                        <PriceInput
+                            value={product.price}
+                            onChange={(value) => onChange('price', value)}
+                            unit="$"
+                            className="w-full md:w-1/2"
+                        />
+
+                        {/* RATING */}
+                        <input
+                            type="number"
+                            placeholder="RATING"
+                            value={product.rating}
+                            onChange={(e) => onChange('rating', e.target.value)}
+                            className="w-full md:w-1/2 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        />
+                    </div>
                 </div>
 
                 {/* Upload images */}
