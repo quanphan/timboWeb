@@ -58,6 +58,7 @@ const Layout = ({ children }) => {
                                     )}
                                     <span className="text-sm font-medium text-gray-700">{user.email}</span>
                                 </div>
+                                <Link to="/admin" className="text-green-600 hover:text-yellow-500">Setting</Link>
                                 <button
                                     onClick={logout}
                                     className="text-red-600 hover:text-yellow-500 font-semibold"
@@ -92,7 +93,9 @@ const Layout = ({ children }) => {
                                             <img src={user.picture} alt="avatar" className="w-6 h-6 rounded-full" />
                                         )}
                                         <span className="text-sm text-gray-700">{user.email}</span>
+                                        <Link to="/admin" className="text-green-600 hover:text-yellow-500">Setting</Link>
                                     </div>
+
                                     <button
                                         onClick={() => {
                                             logout();
