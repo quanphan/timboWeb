@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProducts, getTypes } from "../services/productService";
+import {getBrands, getProducts, getTypes} from "../services/productService";
 import Layout from "./Layout";
 import ShopFilterBar from "./componentPages/ShopFilterBar";
 import { Link, useLocation } from 'react-router-dom';
@@ -19,11 +19,11 @@ const ShopPage = () => {
         const fetchInitialData = async () => {
             try {
                 const typeData = await getTypes();
+                const brandData = await getBrands();
                 const productData = await getProducts({ page: 1, pageSize: PAGE_SIZE });
-                const allBrands = [...new Set(productData.products.map(p => p.brand))];
 
                 setTypes(typeData);
-                setBrands(allBrands);
+                setBrands(brandData);
 
                 const restoredFilters = location.state?.filters;
                 const restoredPage = location.state?.page;
@@ -50,6 +50,7 @@ const ShopPage = () => {
                 type: currentFilters.type,
                 brand: currentFilters.brand,
                 search: currentFilters.search,
+                sort: currentFilters.sort,
             });
 
             if (res.products.length < PAGE_SIZE) setHasMore(false);
