@@ -69,3 +69,13 @@ export async function updateProduct(id, data) {
     const res = await axios.put(`/api/products/${id}`, data);
     return res.data;
 }
+
+export const getReviewsByProductId = async (productId) => {
+    const res = await axios.get(`/api/reviews/${productId}`);
+    return res.data;
+};
+
+export const submitReview = async (reviewData) => {
+    const res = await axios.post('/api/reviews', reviewData);
+    return res.data;
+};

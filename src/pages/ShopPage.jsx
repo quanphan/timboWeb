@@ -3,6 +3,7 @@ import {getBrands, getProducts, getTypes} from "../services/productService";
 import Layout from "./Layout";
 import ShopFilterBar from "./componentPages/ShopFilterBar";
 import { Link, useLocation } from 'react-router-dom';
+import {API_URL} from "../config/api";
 
 const PAGE_SIZE = 10;
 const ShopPage = () => {
@@ -14,6 +15,7 @@ const ShopPage = () => {
     const [hasMore, setHasMore] = useState(true);
     const [totalProducts, setTotalProducts] = useState(0);
     const location = useLocation();
+    const backendUrl = API_URL;
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -95,7 +97,7 @@ const ShopPage = () => {
                             className="flex flex-col items-center text-center bg-white rounded-lg shadow-sm p-3 sm:p-4 hover:shadow-md transition duration-300"
                         >
                             <img
-                                src={product.image}
+                                src={product.image.startsWith('./img') ? product.image : `${backendUrl}${product.image}`}
                                 alt={product.name}
                                 className="w-20 h-20 sm:w-28 sm:h-28 object-contain mb-3"
                             />
