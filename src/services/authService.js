@@ -17,9 +17,19 @@ async function getProfile() {
     return res.data;
 }
 
-async function register(email, password) {
-    const res = await axiosInstance.post("/api/auth/register", { email, password });
+async function updateProfile(data) {
+    const res = await axiosInstance.put("/api/account/me", { data });
     return res.data;
+}
+
+ async function register(name, email, password, phone) {
+    const response = await axiosInstance.post("/api/account/register", {
+        name,
+        email,
+        password,
+        phone,
+    });
+    return response.data;
 }
 
 async function googleLogin(credential) {

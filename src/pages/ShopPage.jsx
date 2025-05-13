@@ -22,8 +22,8 @@ const ShopPage = () => {
             try {
                 const typeData = await getTypes();
                 const brandData = await getBrands();
-                const productData = await getProducts({ page: 1, pageSize: PAGE_SIZE });
-
+                //const productData = await getProducts({ page: 1, pageSize: PAGE_SIZE });
+                console.log('fetchInitial Data shop page')
                 setTypes(typeData);
                 setBrands(brandData);
 
@@ -33,9 +33,9 @@ const ShopPage = () => {
                 if (restoredFilters) {
                     setFilters(restoredFilters);
                     setPage(restoredPage || 1);
-                    applyFilter(restoredPage || 1, restoredFilters, true);
+                    await applyFilter(restoredPage || 1, restoredFilters, true);
                 } else {
-                    applyFilter(1, filters, true);
+                    await applyFilter(1, filters, true);
                 }
             } catch (err) {
                 console.error("Error fetching initial data:", err);
@@ -54,7 +54,7 @@ const ShopPage = () => {
                 search: currentFilters.search,
                 sort: currentFilters.sort,
             });
-
+            console.log('apply filter -> Data shop page');
             if (res.products.length < PAGE_SIZE) setHasMore(false);
 
             setProducts(prev => reset ? res.products : [...prev, ...res.products]);
@@ -78,6 +78,14 @@ const ShopPage = () => {
         applyFilter(nextPage, filters);
     };
 
+    if (!products) {
+        return (
+            <Layout>
+                <div className="text-center py-20">Loading...</div>
+            </Layout>
+        );
+    }
+
     return (
         <Layout>
             <div className="max-w-7xl mx-auto px-4 py-10">
@@ -93,7 +101,7 @@ const ShopPage = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
                     {products.map((product) => (
                         <div
-                            key={product.id}
+                            key={product._id}
                             className="flex flex-col items-center text-center bg-white rounded-lg shadow-sm p-3 sm:p-4 hover:shadow-md transition duration-300"
                         >
                             <img
@@ -112,7 +120,7 @@ const ShopPage = () => {
                                 Delivery <span className="font-semibold">Tuesday, May 27</span>
                             </p>
                             <Link
-                                to={`/product/${product.id}`}
+                                to={`/product/${product._id}`}
                                 state={{ filters, page }} // gửi kèm filters + page hiện tại
                                 className="bg-gray-100 border rounded-full px-3 py-1 text-xs sm:text-sm hover:bg-gray-200"
                             >

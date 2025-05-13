@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Layout from './Layout';
-import { getProductById } from '../services/productService';
+import {getProductById, updateProduct} from '../services/productService';
 import { API_URL } from '../config/api';
 import { submitReview, getReviewsByProductId } from '../services/productService';
 import ShippingInfo from './componentPages/ShippingInfo';
+import ReviewForm from "./componentPages/ReviewForm";
 export default function ProductDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -30,16 +31,39 @@ export default function ProductDetailPage() {
         setNewReview((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleReviewSubmit = async (e) => {
-        e.preventDefault();
+    const handleReviewSubmit = async (rData) => {
         try {
-            await submitReview({ productId: id, ...newReview });
+            const reviewData = { productId: id, ...rData };
+
+            // Submit review
+            await submitReview(reviewData);
+
+            // get review list of this
             const updatedReviews = await getReviewsByProductId(id);
             setReviews(updatedReviews);
-            alert("Thanks for your feedback!");
 
+            // Calculate rating
+            const totalRating = updatedReviews.reduce((sum, r) => sum + r.rating, 0);
+            const avgRating = Math.round(totalRating / updatedReviews.length);
+
+            //  API update rating
+            await  updateProduct(id,JSON.stringify({ rating: avgRating }));
+
+            // update product state with new rating
+            setProduct(prev => ({ ...prev, rating: avgRating }));
+
+            alert("Thanks for your feedback!");
+            setNewReview({
+                name: '',
+                rating: 5,
+                content: '',
+                recommend: false,
+                quality: 5,
+                shipping: 5,
+                service: 5,
+            });
         } catch (err) {
-            console.error('Failed to submit review:', err);
+            console.error('Failed to submit review or update rating:', err);
             alert("Something went wrong. Please try again.");
         }
     };
@@ -184,75 +208,7 @@ export default function ProductDetailPage() {
                 {/* Submit Review Form */}
                 <div className="mt-12 border-t pt-6">
                     <h3 className="text-xl font-bold mb-4">Write a review</h3>
-                    <form onSubmit={handleReviewSubmit} className="space-y-4 max-w-xl">
-
-                        <input
-                            type="text"
-                            required
-                            value={newReview.name}
-                            onChange={(e) => handleReviewChange('name', e.target.value)}
-                            placeholder="Your name"
-                            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-                        />
-
-                        <textarea
-                            required
-                            value={newReview.content}
-                            onChange={(e) => handleReviewChange('content', e.target.value)}
-                            placeholder="Write your review..."
-                            rows={4}
-                            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-                        />
-
-                        {/* Rating */}
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Rating:</label>
-                            <select
-                                value={newReview.rating}
-                                onChange={(e) => handleReviewChange('rating', parseInt(e.target.value))}
-                                className="border p-2 rounded"
-                            >
-                                {[5, 4, 3, 2, 1].map((r) => (
-                                    <option key={r} value={r}>{r} ★</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* Recommend */}
-                        <label className="flex items-center gap-2 text-sm">
-                            <input
-                                type="checkbox"
-                                checked={newReview.recommend}
-                                onChange={(e) => handleReviewChange('recommend', e.target.checked)}
-                            />
-                            I recommend this product
-                        </label>
-
-                        {/* Sub-ratings */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            {['quality', 'shipping', 'service'].map((field) => (
-                                <div key={field}>
-                                    <label className="block text-sm font-medium mb-1 capitalize">{field}</label>
-                                    <select
-                                        value={newReview[field]}
-                                        onChange={(e) => handleReviewChange(field, parseInt(e.target.value))}
-                                        className="w-full border p-2 rounded"
-                                    >
-                                        {[5, 4, 3, 2, 1].map((n) => (
-                                            <option key={n} value={n}>{n} ★</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            ))}
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded"
-                        >
-                            Submit Review
-                        </button>
-                    </form>
+                    <ReviewForm onSubmit={handleReviewSubmit} />
                 </div>
 
             </div>

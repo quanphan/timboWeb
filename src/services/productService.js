@@ -12,7 +12,8 @@ export async function getProducts1({ page, pageSize, type }) {
     const res = await axios.get("/api/products", { params });
     return res.data;
 }
-export const getProducts = async ({ page = 1, pageSize = 10, type = 'all', brand = 'all', search = '', sort }) => {
+export const getProducts = async ({ page = 1, pageSize = 10, type = 'all',
+                                      brand = 'all', search = '', sort }) => {
     try {
         const res = await axios.get('/api/products', {
             params: { page, pageSize, type, brand, search, sort },
@@ -23,11 +24,6 @@ export const getProducts = async ({ page = 1, pageSize = 10, type = 'all', brand
         return { products: [], total: 0 };
     }
 };
-// export const getProducts1 = async ({ page, pageSize, type, brand, search, sort }) => {
-//     const params = { page, pageSize, type, brand, search, sort };
-//     const res = await axiosInstance.get('/products', { params });
-//     return res.data;
-// };
 
 export const getProductById = async (id) => {
     const res = await axios.get(`/api/products/${id}`);

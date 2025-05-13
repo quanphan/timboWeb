@@ -75,7 +75,7 @@ export default function AdminProducts() {
 
     const handleEditSave = async (updatedProduct) => {
         try {
-            await updateProduct(updatedProduct.id, updatedProduct);
+            await updateProduct(updatedProduct._id, updatedProduct);
             toast.success('Product updated!');
             setEditProduct(null);
             fetchProducts();
@@ -159,7 +159,7 @@ export default function AdminProducts() {
                                         Edit
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(p.id)}
+                                        onClick={() => handleDelete(p._id)}
                                         className="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-3 rounded"
                                     >
                                         Delete
