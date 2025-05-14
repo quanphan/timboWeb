@@ -4,11 +4,13 @@ import { FaEnvelope, FaBoxOpen, FaPen } from 'react-icons/fa';
 import { MantineProvider } from '@mantine/core';
 import AdminMessages from './Ad_MessageList';
 import AdminProducts from './Ad_Products';
+import AdminUsers from './Ad_Users';
 // import AdminPosts from './AdminPosts';
 
 export default function AdminPage() {
     const tabs = [
         { id: 'messages', label: 'Messages', icon: <FaEnvelope /> },
+        { id: 'users', label: 'Users', icon: <FaBoxOpen /> },
         { id: 'products', label: 'Products', icon: <FaBoxOpen /> },
         { id: 'posts', label: 'Posts', icon: <FaPen /> },
     ];
@@ -49,6 +51,7 @@ export default function AdminPage() {
             <div>
                 {activeTab === 'messages' && <AdminMessages />}
                 {activeTab === 'products' && <AdminProducts />}
+                {activeTab === 'users' && <AdminUsers />}
                 {activeTab === 'posts' && (
                     <div className="text-gray-700">
                         <p>Posts Management - Coming Soon...</p>

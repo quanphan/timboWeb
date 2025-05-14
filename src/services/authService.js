@@ -16,12 +16,6 @@ async function getProfile() {
     const res = await axiosInstance.get("/api/account/me");
     return res.data;
 }
-
-async function updateProfile(data) {
-    const res = await axiosInstance.put("/api/account/me", { data });
-    return res.data;
-}
-
  async function register(name, email, password, phone) {
     const response = await axiosInstance.post("/api/account/register", {
         name,
@@ -30,6 +24,11 @@ async function updateProfile(data) {
         phone,
     });
     return response.data;
+}
+
+async function updateProfile(data) {
+    const res = await axiosInstance.put("/api/account/me", { data });
+    return res.data;
 }
 
 async function googleLogin(credential) {
@@ -61,4 +60,5 @@ export {
     refreshToken,
     logout,
     googleLogin,
+    updateProfile
 };

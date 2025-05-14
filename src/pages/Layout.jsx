@@ -2,12 +2,14 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Menu, X } from "lucide-react";
-import ShopPage from "./ShopPage"; // 👈 npm install lucide-react
+import ShopPage from "./ShopPage";
+import {useCartContext} from "../contexts/CartContext";
 
 const Layout = ({ children }) => {
     const navigate = useNavigate();
     const { user, logout, loading } = useContext(AuthContext);
     const [menuOpen, setMenuOpen] = useState(false);
+    const { items } = useCartContext();
 
     if (loading) {
         return (
@@ -58,7 +60,9 @@ const Layout = ({ children }) => {
                                     )}
                                     <span className="text-sm font-medium text-gray-700">{user.email}</span>
                                 </div>
-                                <Link to="/admin" className="text-green-600 hover:text-yellow-500">Setting</Link>
+                                {user.admin && (
+                                    <Link to="/admin" className="text-green-600 hover:text-yellow-500">Setting</Link>
+                                )}
                                 <button
                                     onClick={logout}
                                     className="text-red-600 hover:text-yellow-500 font-semibold"
@@ -67,6 +71,7 @@ const Layout = ({ children }) => {
                                 </button>
                             </>
                         )}
+                        <Link to="/yourcart" className="text-orange-500 hover:text-yellow-500">🛒 {items.length}</Link>
                     </div>
                 </div>
 
@@ -93,7 +98,9 @@ const Layout = ({ children }) => {
                                             <img src={user.picture} alt="avatar" className="w-6 h-6 rounded-full" />
                                         )}
                                         <span className="text-sm text-gray-700">{user.email}</span>
-                                        <Link to="/admin" className="text-green-600 hover:text-yellow-500">Setting</Link>
+                                        {user.admin && (
+                                            <Link to="/admin" className="text-green-600 hover:text-yellow-500">Setting</Link>
+                                        )}
                                     </div>
 
                                     <button

@@ -14,9 +14,13 @@ import BlogPage from "./pages/BlogPage";
 import AdminPage from "./pages/AdminPage";
 import { Toaster } from 'react-hot-toast';
 import ProductDetailPage from './pages/ProductDetailPage';
+import YourCartPage from './pages/YourCart';
+import {CartProvider} from "./contexts/CartContext";
+
 const App = () => (
     <Router>
         <AuthProvider>
+            <CartProvider>
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
@@ -28,8 +32,10 @@ const App = () => (
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/product/:id" element={<ProductDetailPage />} />
+                <Route path="/yourcart" element={<YourCartPage />} />
             </Routes>
             <Toaster position="top-right" reverseOrder={false} />
+            </CartProvider>
         </AuthProvider>
     </Router>
 

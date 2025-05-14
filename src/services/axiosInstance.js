@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { API_URL } from "../config/api";
-import {getProfile, refreshToken} from "./authService";
+import {refreshToken} from "./authService";
 
 const axiosInstance = axios.create({
     baseURL: API_URL,

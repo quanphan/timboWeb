@@ -1,22 +1,24 @@
-import { useEffect, useState } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {useParams, useLocation, useNavigate, Link} from 'react-router-dom';
 import Layout from './Layout';
 import {getProductById, updateProduct} from '../services/productService';
 import { API_URL } from '../config/api';
 import { submitReview, getReviewsByProductId } from '../services/productService';
 import ShippingInfo from './componentPages/ShippingInfo';
 import ReviewForm from "./componentPages/ReviewForm";
+import {AuthContext} from "../contexts/AuthContext";
+import {useCartContext} from "../contexts/CartContext";
 export default function ProductDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const filters = location.state?.filters;
     const page = location.state?.page;
-
+    const { user} = useContext(AuthContext);
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState('');
     const [reviews, setReviews] = useState([]);
-
+    const { addItemToCart } = useCartContext();
     const [newReview, setNewReview] = useState({
         name: '',
         rating: 5,
@@ -138,7 +140,8 @@ export default function ProductDetailPage() {
                         <p className="text-gray-700 mb-4">{product.description}</p>
                         <p className="text-sm text-gray-500 mb-1">Brand: {product.brand}</p>
                         <p className="text-sm text-yellow-600 mb-4">Rating: {product.rating} ★</p>
-                        <button className="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">
+                        <button onClick={() => addItemToCart(product._id, 1)}
+                                className="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">
                             Add to Cart
                         </button>
                         <ShippingInfo/>
@@ -206,11 +209,12 @@ export default function ProductDetailPage() {
                 </div>
 
                 {/* Submit Review Form */}
-                <div className="mt-12 border-t pt-6">
-                    <h3 className="text-xl font-bold mb-4">Write a review</h3>
-                    <ReviewForm onSubmit={handleReviewSubmit} />
-                </div>
-
+                {user && (
+                    <div className="mt-12 border-t pt-6">
+                        <h3 className="text-xl font-bold mb-4">Write a review</h3>
+                        <ReviewForm onSubmit={handleReviewSubmit} />
+                    </div>
+                )}
             </div>
         </Layout>
     );
