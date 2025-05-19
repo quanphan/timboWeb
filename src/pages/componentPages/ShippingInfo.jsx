@@ -17,7 +17,7 @@ const USD_EXCHANGE = 24500;
 const formatDate = (date) =>
     date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-export default function ShippingInfo() {
+export default function ShippingInfo({ onShippingChange }) {
     const [selected, setSelected] = useState(countries[0]);
     const [showDetail, setShowDetail] = useState(true);
 
@@ -37,6 +37,12 @@ export default function ShippingInfo() {
             localStorage.setItem('selectedCountryCode', code);
         }
     };
+    useEffect(() => {
+        const cost = Math.round(BASE_COST_VND * selected.factor);
+        if (onShippingChange) {
+            onShippingChange(cost);
+        }
+    }, [selected]);
 
     const rawCostVND = BASE_COST_VND * selected.factor;
     const formattedCost = selected.isUSD

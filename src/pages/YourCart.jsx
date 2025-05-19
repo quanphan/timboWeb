@@ -1,12 +1,15 @@
 import { useCartContext } from '../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { API_URL } from "../config/api";
 import Layout from "./Layout";
+import {formatCurrency} from "../utils/utils";
+import ShippingInfo from "./componentPages/ShippingInfo";
 
 export default function YourCartPage() {
     const { items, updateItem, removeItem, total } = useCartContext();
     const navigate = useNavigate();
+    const [shippingCost, setShippingCost] = useState(636000);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -27,13 +30,12 @@ export default function YourCartPage() {
                                 {items.map(item => {
                                     const price = Number(item.product?.price || 0);
                                     const totalItemPrice = price * item.quantity;
-
                                     return (
                                         <div key={item.product._id} className="flex gap-4 border-b pb-6">
                                             <img
                                                 src={`${API_URL}${item.product.images?.[0] || item.product.image}`}
                                                 alt={item.product.name}
-                                                className="w-24 h-24 object-cover rounded border"
+                                                className="w-[120px] h-32 object-cover rounded border"
                                             />
                                             <div className="flex-1">
                                                 <h2 className="text-lg font-semibold line-clamp-1">{item.product.name}</h2>
@@ -46,7 +48,7 @@ export default function YourCartPage() {
                                                             onChange={(e) => updateItem(item.product._id, parseInt(e.target.value))}
                                                             className="border px-2 py-1 rounded"
                                                         >
-                                                            {[1, 2, 3, 4, 5].map((n) => (
+                                                            {[1, 2, 3, 4, 5,6,7,8,9].map((n) => (
                                                                 <option key={n} value={n}>{n}</option>
                                                             ))}
                                                         </select>
@@ -58,9 +60,9 @@ export default function YourCartPage() {
                                                     </div>
                                                     <div className="w-full flex md:justify-end">
                                                         <p className="text-red-500 font-semibold mt-2">
-                                                            {totalItemPrice.toLocaleString()} ₫
+                                                             { formatCurrency(totalItemPrice,item.product.unit)}
                                                             <span className="block text-xs text-gray-500">
-                                                                ({price.toLocaleString()} ₫ each)
+                                                                ({formatCurrency(price,item.product.unit)} each)
                                                             </span>
                                                         </p>
                                                     </div>
@@ -69,7 +71,9 @@ export default function YourCartPage() {
                                         </div>
                                     );
                                 })}
+                                <div className="w-full flex justify-center md:justify-end pr-4">Total items: { formatCurrency(total)}</div>
                             </div>
+
                         )}
                     </div>
                 </div>
@@ -88,16 +92,16 @@ export default function YourCartPage() {
                     <div className="text-sm space-y-2 mb-4">
                         <div className="flex justify-between">
                             <span>Item(s) total</span>
-                            <span>{total.toLocaleString()} ₫</span>
+                            <span>{formatCurrency(total)}</span>
                         </div>
                         <div className="flex justify-between text-gray-600 text-sm">
                             <span>Shipping</span>
-                            <span>636,000 ₫</span>
+                            <span>{formatCurrency(shippingCost)}</span>
                         </div>
                         <hr />
                         <div className="flex justify-between font-semibold text-lg">
                             <span>Total</span>
-                            <span>{(total + 636000).toLocaleString()} ₫</span>
+                            <span>{formatCurrency(total+shippingCost)}</span>
                         </div>
                     </div>
 
@@ -111,6 +115,8 @@ export default function YourCartPage() {
                     <div className="text-xs text-gray-500 mt-3">
                         <p>Local taxes included (where applicable)</p>
                     </div>
+
+                    <ShippingInfo onShippingChange={setShippingCost}/>
                 </div>
             </div>
         </div>

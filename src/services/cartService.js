@@ -59,13 +59,14 @@ async function updateCartItem(id, data) {
         const res = await axiosInstance.put(`/api/cart/${id}`, data);
         return res.data;
     } else {
-        let qty=data.qty
+        let qty=data.quantity
         const cart = JSON.parse(localStorage.getItem("cart") || "[]");
         const index = cart.findIndex((item) => item.productId === id);
         if (index >= 0) {
             cart[index].quantity = qty;
         }
-        return JSON.parse(localStorage.getItem("cart") || "[]");
+        localStorage.setItem("cart", JSON.stringify(cart));
+        return cart || [];
     }
 }
 
@@ -80,7 +81,8 @@ async function deleteCartItem(id) {
         if (index >= 0) {
             cart.removeItem(index);
         }
-        return JSON.parse(localStorage.getItem("cart") || "[]");
+        localStorage.setItem("cart", JSON.stringify(cart));
+        return cart || [];
     }
 }
 

@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import {addToCart, getCart, mergeLocalCartToServer, updateCartItem} from "../services/cartService";
-import {getProductById} from "../services/productService";
 
 export default function useCart() {
     const [items, setItems] = useState([]);
@@ -28,7 +27,7 @@ export default function useCart() {
     };
 
     const updateItem = async (productId, qty) => {
-        const data = await updateCartItem(productId,{qty:qty});
+        const data = await updateCartItem(productId,{quantity:qty});
         setItems(data.items || data);
     };
 
