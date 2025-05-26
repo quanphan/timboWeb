@@ -1,8 +1,21 @@
 import axiosInstance from "./axiosInstance";
 import {getProductById} from "./productService";
+import { jwtDecode } from "jwt-decode";
 
 function isLoggedIn() {
     return !!localStorage.getItem("accessToken");
+}
+
+function getUserIdFromToken() {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return null;
+
+    try {
+        const decoded = jwtDecode(token);
+        return decoded?.id || null;
+    } catch {
+        return null;
+    }
 }
 
 // Gọi API add to cart nếu login
@@ -10,12 +23,12 @@ async function addToCart(productId, quantity = 1) {
     const product = await getProductById(productId);
     if (isLoggedIn()) {
         // Logged in → call backend API
-        const res = await axiosInstance.post("/api/cart", { productId, quantity });
-        if(res)
-        {
-            res.data.product=product;
+        const userId = getUserIdFromToken();
+        const res = await axiosInstance.post("/api/cart", { userId, productId, quantity });
+        if (res?.data) {
+            res.data.product = product;
+            return res.data;
         }
-        return res.data;
 
     } else {
         // Chưa login → lưu localStorage
@@ -38,7 +51,8 @@ async function addToCart(productId, quantity = 1) {
 // Lấy cart hiện tại
 async function getCart() {
     if (isLoggedIn()) {
-        const res = await axiosInstance.get("/api/cart");
+        const userId = getUserIdFromToken();
+        const res = await axiosInstance.get(`/api/cart/${userId}`);
         return res.data;
     } else {
         return JSON.parse(localStorage.getItem("cart") || "[]");
@@ -48,41 +62,45 @@ async function getCart() {
 // Hàm merge cart local lên server sau khi login
 async function mergeLocalCartToServer() {
     const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    if (localCart.length === 0) return;
+    const userId = getUserIdFromToken();
+    if (!userId || localCart.length === 0) return;
 
-    await axiosInstance.post("/api/cart/merge", { items: localCart });
+    const items = localCart.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity
+    }));
+
+    await axiosInstance.post("/api/cart/merge", { userId, items });
     localStorage.removeItem("cart");
 }
 
-async function updateCartItem(id, data) {
+async function updateCartItem(productId, { quantity }) {
     if (isLoggedIn()) {
-        const res = await axiosInstance.put(`/api/cart/${id}`, data);
+        const userId = getUserIdFromToken();
+        const res = await axiosInstance.post("/api/cart", { userId, productId, quantity }); // dùng lại POST
         return res.data;
     } else {
-        let qty=data.quantity
         const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-        const index = cart.findIndex((item) => item.productId === id);
-        if (index >= 0) {
-            cart[index].quantity = qty;
-        }
+        const index = cart.findIndex((item) => item.productId === productId);
+
+        if (index >= 0) cart[index].quantity = quantity;
         localStorage.setItem("cart", JSON.stringify(cart));
-        return cart || [];
+        return cart;
     }
 }
 
-async function deleteCartItem(id) {
+async function deleteCartItem(productId) {
     if (isLoggedIn()) {
-        const res = await axiosInstance.delete(`/api/cart/${id}`);
+        const userId = getUserIdFromToken();
+        const res = await axiosInstance.delete(`/api/cart/${userId}/${productId}`);
         return res.data;
     }
     else {
         const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-        const index = cart.findIndex((item) => item.productId === id);
-        if (index >= 0) {
-            cart.removeItem(index);
-        }
+        const index = cart.findIndex((item) => item.productId === productId);
+        if (index >= 0) cart.splice(index, 1);
         localStorage.setItem("cart", JSON.stringify(cart));
-        return cart || [];
+        return cart;
     }
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import {addToCart, getCart, mergeLocalCartToServer, updateCartItem} from "../services/cartService";
+import {addToCart, deleteCartItem, getCart, mergeLocalCartToServer, updateCartItem} from "../services/cartService";
 
 export default function useCart() {
     const [items, setItems] = useState([]);
@@ -32,7 +32,7 @@ export default function useCart() {
     };
 
     const removeItem =async (productId) => {
-        const data = await updateCartItem(productId);
+        const data = await deleteCartItem(productId);
         setItems(data.items || data);
     };
 

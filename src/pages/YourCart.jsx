@@ -12,6 +12,9 @@ export default function YourCartPage() {
     const [shippingCost, setShippingCost] = useState(636000);
 
     useEffect(() => {
+        // if (user?.isLoggedIn) {
+        //     syncCart();
+        // }
         window.scrollTo(0, 0);
     }, []);
 
